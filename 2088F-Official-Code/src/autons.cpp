@@ -16,10 +16,39 @@ const int TURN_SPEED  = 90;
 const int SWING_SPEED = 90;
 
 
+///
+// Lift PID
+///
+double speed = 100;
+int currentPosition = 0;
+int counter = 0;
+double kP = 0.5;
+bool reachedPosition = false;
+int tolerance = 9;
 
-///
-// Constants
-///
+void liftPID (int target) {
+   counter = 0;
+  int error = target;
+  reachedPosition = false;
+  while (reachedPosition == false) {
+    int potent = pot.get_value();
+    error = target - potent;
+    speed = kP * error;
+    lift.move_voltage(speed);
+
+    if (fabs (error) < tolerance) {
+      counter++;
+    } else {
+      counter = 0;
+    }
+    if (counter > 5) {
+      reachedPosition = true;
+      lift.move_velocity(0);
+    }
+    pros::delay (10);
+  }
+}
+
 
 // It's best practice to tune constants when the robot is empty and with heavier game objects, or with lifts up vs down.
 // If the objects are light or the cog doesn't change much, then there isn't a concern here.
@@ -148,4 +177,22 @@ void mGoal_auton() {
   tilter.set_value(true);
 }
 
-void 
+void yGoal_auton() {
+  // Get Goal
+  chassis.set_drive_pid(48, 127);
+  chassis.wait_drive();
+
+  claw.set_value(true);
+
+  // Drive back
+  chassis.set_drive_pid(-48, 127);
+  chassis.wait_drive();
+}
+
+void WP_auton() {
+
+}
+
+void testing_auton() {
+
+}

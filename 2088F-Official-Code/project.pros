@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "2088F Skills Auton",
+    "project_name": "2088F Code",
     "target": "v5",
     "templates": {
       "EZ-Template": {
@@ -187,8 +187,6 @@
         "version": "3.5.4"
       }
     },
-    "upload_options": {
-      "slot": 1
-    }
+    "upload_options": {}
   }
 }

@@ -97,24 +97,17 @@ void initialize() {
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
     Auton("Example Drive\n\nDrive forward and come back.", drive_example),
-    Auton("Example Turn\n\nTurn 3 times.", turn_example),
-    Auton("Drive and Turn\n\nDrive forward, turn, come back. ", drive_and_turn),
-    Auton("Drive and Turn\n\nSlow down during drive.", wait_until_change_speed),
-    Auton("Swing Example\n\nSwing, drive, swing.", swing_example),
-    Auton("Combine all 3 movements", combining_movements),
-    Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
+    Auton("Skills Auton\n\n200 point skills auton.", skills_auton),
+    Auton("Middle Goal Auton\n\nRight side middle goal auton.", mGoal_auton),
+    Auton("Yellow Goal Auton\n\nBoth sides yellow goal auton.", yGoal_auton),
+    Auton("Win Point Auton\n\nLeft side Win Point Auton", WP_Auton),
+    Auton("Testing Auton\n\nAuton for Testing", testing_auton),
   });
 
   // Initialize chassis and auton selector
   chassis.initialize();
   ez::as::initialize();
-
-  pros::Motor intake(pros::E_MOTOR_GEARSET_06);
-  pros::Motor lift (pros::E_MOTOR_GEARSET_36);
   pros::Controller Controller(pros::E_CONTROLLER_MASTER);
-  // pros::ADIDigitalOut claw ('H');
-  // pros::ADIDigitalOut tilter ('G');
-
 }
 
 
@@ -156,43 +149,6 @@ void competition_initialize() {
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-
-pros::ADIDigitalOut claw ('H');
-pros::ADIDigitalOut tilter ('G');
-pros::ADIPotentiometer pot ('A');
-pros::Motor lift(11, pros::E_MOTOR_GEARSET_36, true, pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor intake(1, pros::E_MOTOR_GEARSET_18, true, pros::E_MOTOR_ENCODER_DEGREES);
-
-// Lift PID
-int speed = 100;
-int currentPosition = 0;
-int counter = 0;
-double kP = 0.5;
-bool reachedPosition = false;
-int tolerance = 9;
-
-void liftPID (int target) {
-   counter = 0;
-  int error = target;
-  reachedPosition = false;
-  while (reachedPosition == false) {
-    int potent = pot.get_value();
-    error = target - potent;
-    speed = kP * error;
-    lift.move_voltage(speed);
-
-    if (fabs (error) < tolerance) {
-      counter++;
-    } else {
-      counter = 0;
-    }
-    if (counter > 5) {
-      reachedPosition = true;
-      lift.move_velocity(0);
-    }
-    pros::delay (10);
-  }
-}
 
 void autonomous() {
   chassis.reset_pid_targets(); // Resets PID targets to 0
